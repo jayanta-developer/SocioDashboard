@@ -1,0 +1,137 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  transition: all 0.3s ease;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #424242;
+  color: #fff;
+  padding: 20px;
+  transition: width 0.3s ease;
+  position: relative;
+  border-radius: 0 10px 10px 0;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.toggle-button {
+  position: absolute;
+  top: 10px;
+  right: -20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+.sidebar li {
+  margin: 20px 0;
+}
+
+.sidebar a {
+  color: #564c4c;
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  text-decoration: underline;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+}
+
+.dashboard-container.collapsed .main-content {
+  /* margin-left: 20px; */
+}
+.mainSectionNavBar {
+  width: 100%;
+  height: 40px;
+  background: #424242;
+  border-radius: 8px;
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.haumIcon {
+  width: 20px;
+  cursor: pointer;
+}
+.content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.sideMenuItemList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 25px;
+}
+.sideMenuItem {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+  background: #fbfbfb;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.6s;
+  cursor: pointer;
+}
+.sideMenuItemActive {
+  background: #dedede;
+}
+.sideMenuItem:hover {
+  background: #dedede;
+}
+.sideMenuItem p {
+  color: #333;
+  font-size: 18px;
+}
+.sideMenuItem img {
+  width: 20px;
+}
+.cLogo {
+  font-size: 40px;
+  color: #e9cb0a;
+  font-weight: 600;
+  font-style: italic;
+}
+.collapsed .cLogo {
+  position: relative;
+  left: -4px;
+}
+.ClogoBox {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.ClogoBox img {
+  width: 40px;
+}
+.collapsed .ClogoBox {
+  justify-content: center;
+  gap: 0;
+}
