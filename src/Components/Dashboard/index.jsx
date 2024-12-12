@@ -11,6 +11,7 @@ import report from "../../assets/Images/reports.svg";
 import analytics from "../../assets/Images/analytics.svg"
 import muneIcon from "../../assets/Images/menuIcon.svg"
 import CLogo from "../../assets/Images/SocioStaysIcon.png"
+import PropertyIcon from "../../assets/Images/property.png"
 
 export default function Dashboard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -27,7 +28,7 @@ export default function Dashboard() {
 
         <nav className='sideMenuItemList'>
           <div onClick={() => setActiveMenu(0)} className="sideMenuItem">
-            <img src={userIcon} alt="" />
+            <img src={PropertyIcon} alt="" />
             <p style={{ display: isCollapsed ? "none" : "block" }}>Properties</p>
           </div>
           <div onClick={() => setActiveMenu(1)} className="sideMenuItem">

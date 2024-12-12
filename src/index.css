@@ -14,3 +14,16 @@
 p {
   margin: 0;
 }
+::-webkit-scrollbar {
+  width: 5px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e9cb0a; /* Optional: track background color */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #fdaf;
+  border-radius: 10px;
+}

@@ -1,6 +1,9 @@
 import Axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+export const localURL = "http://localhost:4000/socio/api";
+export const serverURL = "https://socioserver.onrender.com/socio/api";
+
 export const STATUSES = Object.freeze({
   IDLE: "idle",
   ERROR: "error",
@@ -39,7 +42,31 @@ export const { get } = PropertySlice.actions;
 export default PropertySlice.reducer;
 
 export const FetchProperties = createAsyncThunk("get/properties", async () => {
-  const res = await fetch("http://localhost:4000/socio/api/flats");
+  const res = await fetch(localURL + "/flats");
   const data = await res.json();
   return data;
 });
+
+export const CreateProperty = createAsyncThunk(
+  "create/property",
+  async (data) => {
+    try {
+      const res = await Axios.post(localURL + "/flats/create", {
+        ...data,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const DeletePropert = createAsyncThunk(
+  "delete/properties",
+  async (id) => {
+    try {
+      const res = await Axios.post(localURL + "/flats/delete/" + id);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
