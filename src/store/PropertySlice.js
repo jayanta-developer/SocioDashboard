@@ -64,7 +64,23 @@ export const DeletePropert = createAsyncThunk(
   "delete/properties",
   async (id) => {
     try {
-      const res = await Axios.post(localURL + "/flats/delete/" + id);
+      await Axios.post(localURL + "/flats/delete/" + id);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+
+export const UpdateProperty = createAsyncThunk(
+  "update/properties",
+  async ({ data, id }) => {
+    console.log(data);
+    console.log(id);
+
+    try {
+      await Axios.post(localURL + "/flats/update/" + id, {
+        ...data,
+      });
     } catch (err) {
       console.log(err);
     }

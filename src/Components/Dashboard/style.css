@@ -135,3 +135,28 @@
   justify-content: center;
   gap: 0;
 }
+.adminLogBox {
+  width: 100%;
+  height: 100vh;
+  background: #424242;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mainAdminLogBox {
+  width: 400px;
+  padding: 20px;
+  border-radius: 13px;
+  background: #dedede;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.mainAdminLogBox h3 {
+  text-align: center;
+}
+.mainAdminLogBox .PropInputBox {
+  min-width: unset;
+  width: 100%;
+}

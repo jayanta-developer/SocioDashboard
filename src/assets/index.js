@@ -1,6 +1,9 @@
 export const facilites = [
   "Air conditioning",
   "Kitchen",
+  "Television",
+  "CCTV",
+  "Emergency alarm",
   "Wifi",
   "Free parking",
   "Secured Entry",

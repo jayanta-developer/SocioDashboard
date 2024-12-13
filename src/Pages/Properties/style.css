@@ -183,6 +183,9 @@
   align-items: center;
   border: 3px solid #fdaf17;
   border-radius: 10px;
+  background: transparent;
+  color: #c68b15;
+  font-weight: 600;
   cursor: pointer;
 }
 .UpdateBtn p {
@@ -195,4 +198,7 @@
 }
 .SummeryInputBox .PropInputBox {
   height: 60px;
+}
+.BtnActive {
+  cursor: pointer;
 }

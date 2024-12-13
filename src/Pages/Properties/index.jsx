@@ -8,7 +8,7 @@ import AddIcon from "../../assets/Images/Add.png"
 import crossIcon from "../../assets/Images/icons8-cross.svg"
 import dropIocn from "../../assets/Images/ArrowGray.png";
 
-import { FetchProperties, CreateProperty, DeletePropert } from "../../store/PropertySlice";
+import { FetchProperties, CreateProperty, DeletePropert, UpdateProperty } from "../../store/PropertySlice";
 import { useDispatch, useSelector } from 'react-redux';
 
 //components
@@ -35,6 +35,11 @@ export default function Properties({ activeMenu }) {
   const [facilitiesCrDropVal, setFacilitiesCrDropVal] = useState("");
   const [facilitiesCrData, setFacilitiesCrData] = useState([]);
 
+
+  //update
+  const [updateProperty, setUpdateProperty] = useState({})
+  const [updateEditIndex, setUpdateEditIndex] = useState()
+  console.log(updateProperty);
 
 
 
@@ -102,7 +107,8 @@ export default function Properties({ activeMenu }) {
       video: "video url",
       city: localPropertyData?.city,
       sector: localPropertyData?.sector,
-      map: [localPropMapVal?.lat, localPropMapVal?.long],
+      mapLat: localPropertyData?.mapLat,
+      mapLong: localPropertyData?.mapLong,
       price: localPropertyData.price,
       owner: localPropertyData.owner,
       room: localPropertyData.room,
@@ -119,6 +125,23 @@ export default function Properties({ activeMenu }) {
     Reloader(500)
   }
 
+
+  //update property
+  const handelUpdateProperty = (event, index) => {
+    const { name, value } = event.target;
+    console.log(name, value);
+
+    setUpdateProperty((prevData) => ({
+      ...prevData,
+      [index]: { ...prevData[index], [name]: value }
+    }));
+  }
+
+  const handleDBPropertyUpdate = (i, id) => {
+    // console.log(i, id);
+    // console.log(updateProperty[i]);
+    dispatch(UpdateProperty({ data: updateProperty[i], id }))
+  }
 
   useEffect(() => {
     dispatch(FetchProperties());
@@ -176,8 +199,8 @@ export default function Properties({ activeMenu }) {
             <div className="propertyRowBox">
               <h3>Map:</h3>
               <div className="PropInputBox towInput">
-                <input type="text" placeholder='latitude' name='lat' onChange={handleLocalPropertMapVal} />|
-                <input type="text" placeholder='longitude' name='long' onChange={handleLocalPropertMapVal} />
+                <input type="text" placeholder='latitude' name='mapLat' onChange={handleLocalPropertyVal} />|
+                <input type="text" placeholder='longitude' name='mapLong' onChange={handleLocalPropertyVal} />
               </div>
             </div>
             <div className="propertyRowBox">
@@ -253,74 +276,74 @@ export default function Properties({ activeMenu }) {
             </div>
           </div>
 
-
+          {/* -----------------------Render all data----------------- */}
           {
             data?.map((el, i) => (
               <div key={i} className="propertyItemBox">
                 <div className="crudIconBox">
-                  <img src={EditIcon} alt="" />
+                  <img src={EditIcon} alt="" onClick={() => setUpdateEditIndex(i)} />
                   <img src={TrashIcon} alt="" onClick={() => DeleteProperty(el?._id)} />
                 </div>
 
                 <div className="propertyRowBox">
                   <h3>Title:</h3>
                   <div className="PropInputBox">
-                    <input type="text" value={el?.title} />
+                    <input type="text" name='title' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.title : el?.title} />
                   </div>
                 </div>
                 <div className="propertyRowBox">
                   <h3>Price:</h3>
                   <div className="PropInputBox">
-                    <input type="text" value={el?.price} />
+                    <input type="text" name="price" disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.price : el?.price} />
                   </div>
                 </div>
                 <div className="propertyRowBox SummeryInputBox">
                   <h3>Summery:</h3>
                   <div className="PropInputBox">
-                    <textarea type="text" value={el?.summery} />
+                    <textarea type="text" name="summery" disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.summery : el?.summery} />
                   </div>
                 </div>
                 <div className="propertyRowBox">
                   <h3>Owner:</h3>
                   <div className="PropInputBox">
-                    <input type="text" value={el?.owner} />
+                    <input type="text" name='owner' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.owner : el?.owner} />
                   </div>
                 </div>
                 <div className="propertyRowBox">
                   <h3>City:</h3>
                   <div className="PropInputBox">
-                    <input type="text" value={el?.city} />
+                    <input type="text" name='city' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.city : el?.city} />
                   </div>
                 </div>
                 <div className="propertyRowBox">
                   <h3>Map:</h3>
                   <div className="PropInputBox towInput">
-                    <input type="text" value={el?.map[0]} />,
-                    <input type="text" value={el?.map[0]} />
+                    <input type="text" name='mapLat' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.mapLat : el?.mapLat} />,
+                    <input type="text" name='mapLong' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.mapLat : el?.mapLat} />
                   </div>
                 </div>
                 <div className="propertyRowBox">
                   <h3>Sector:</h3>
                   <div className="PropInputBox">
-                    <input type="text" value={el?.sector} />
+                    <input type="text" name="sector" disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.sector : el?.sector} />
                   </div>
                 </div>
                 <div className="propertyRowBox">
                   <h3>Area:</h3>
                   <div className="PropInputBox">
-                    <input type="text" value={el?.area} />
+                    <input type="text" name='area' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.area : el?.area} />
                   </div>
                 </div>
                 <div className="propertyRowBox">
                   <h3>Room:</h3>
                   <div className="PropInputBox">
-                    <input type="text" value={el?.room} />
+                    <input type="text" name="room" disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.room : el?.room} />
                   </div>
                 </div>
                 <div className="propertyRowBox">
                   <h3>Bath:</h3>
                   <div className="PropInputBox">
-                    <input type="text" value={el?.bath} />
+                    <input type="text" name='bath' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.bath : el?.bath} />
                   </div>
                 </div>
                 <div className="propertyRowBox facltyInBox">
@@ -340,9 +363,8 @@ export default function Properties({ activeMenu }) {
                 </div>
                 <div className="BtnBox">
 
-                  <div className="UpdateBtn">
-                    <p>Save</p>
-                  </div>
+                  <button className={updateEditIndex !== i ? 'UpdateBtn ' : "UpdateBtn BtnActive"} disabled={updateEditIndex !== i} onClick={() => handleDBPropertyUpdate(i, el?._id)}>Update</button>
+
 
                 </div>
               </div>
