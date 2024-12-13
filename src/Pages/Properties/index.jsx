@@ -138,10 +138,11 @@ export default function Properties({ activeMenu }) {
   }
 
   const handleDBPropertyUpdate = (i, id) => {
-    // console.log(i, id);
-    // console.log(updateProperty[i]);
     dispatch(UpdateProperty({ data: updateProperty[i], id }))
+    Reloader(500)
   }
+
+
 
   useEffect(() => {
     dispatch(FetchProperties());

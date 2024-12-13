@@ -42,7 +42,7 @@ export const { get } = PropertySlice.actions;
 export default PropertySlice.reducer;
 
 export const FetchProperties = createAsyncThunk("get/properties", async () => {
-  const res = await fetch(localURL + "/flats");
+  const res = await fetch(serverURL + "/flats");
   const data = await res.json();
   return data;
 });
@@ -51,7 +51,7 @@ export const CreateProperty = createAsyncThunk(
   "create/property",
   async (data) => {
     try {
-      const res = await Axios.post(localURL + "/flats/create", {
+      const res = await Axios.post(serverURL + "/flats/create", {
         ...data,
       });
     } catch (err) {
@@ -64,7 +64,7 @@ export const DeletePropert = createAsyncThunk(
   "delete/properties",
   async (id) => {
     try {
-      await Axios.post(localURL + "/flats/delete/" + id);
+      await Axios.post(serverURL + "/flats/delete/" + id);
     } catch (err) {
       console.log(err);
     }
@@ -78,7 +78,7 @@ export const UpdateProperty = createAsyncThunk(
     console.log(id);
 
     try {
-      await Axios.post(localURL + "/flats/update/" + id, {
+      await Axios.post(serverURL + "/flats/update/" + id, {
         ...data,
       });
     } catch (err) {
