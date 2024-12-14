@@ -21,25 +21,21 @@ export default function Properties({ activeMenu }) {
   const dispatch = useDispatch();
   // dispatch(FetchProperties());
   const { status, data } = useSelector((state) => state.Properties);
-
-  const [facilitiesDrop, setFacilitiesDrop] = useState()
-  const [facilitiesDropVal, setFacilitiesDropVal] = useState("text text")
-
   const [dropdownStates, setDropdownStates] = useState({});
   const [selectedValues, setSelectedValues] = useState({});
-
   const [localPropertyData, setLocalPropertyData] = useState();
-  const [localPropMapVal, setLocalPropMapVal] = useState();
   const [createPropertyBox, setCreatePropertyBox] = useState(false);
-  const [facilitiesCrDrop, setFacilitiesCrDrop] = useState();
-  const [facilitiesCrDropVal, setFacilitiesCrDropVal] = useState("");
   const [facilitiesCrData, setFacilitiesCrData] = useState([]);
-
 
   //update
   const [updateProperty, setUpdateProperty] = useState({})
   const [updateEditIndex, setUpdateEditIndex] = useState()
-  console.log(updateProperty);
+  const [facilitiesUpdate, setFacilitiesUpdate] = useState({})
+
+  const [updatedFChipAry, setUpdatedFChipAry] = useState([]);
+  const [updatedFChipIndex, setUpdatedFChipIndex] = useState();
+  const [updatedFChipId, setUpdatedFChipId] = useState();
+
 
 
 
@@ -50,22 +46,6 @@ export default function Properties({ activeMenu }) {
       [name]: value
     }));
   }
-
-  const handleLocalPropertMapVal = (e) => {
-    const { name, value } = e.target;
-    setLocalPropMapVal(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  }
-
-  // Toggle dropdown visibility
-  const toggleDropdown = (cardId) => {
-    setDropdownStates((prevStates) => ({
-      ...prevStates,
-      [cardId]: !prevStates[cardId],
-    }));
-  };
 
   // Handle dropdown value change
   const handleValueChange = (cardId, value) => {
@@ -81,7 +61,6 @@ export default function Properties({ activeMenu }) {
   };
 
 
-
   const handleLocalFacltyDropClick = (val) => {
     const ary = [...facilitiesCrData];
     if (!ary.includes(val)) {
@@ -91,6 +70,7 @@ export default function Properties({ activeMenu }) {
       return
     }
   }
+
   const handleLocalFacChipDel = (i) => {
     const ary = [...facilitiesCrData]
     const newArray = ary.filter((_, index) => index !== i);
@@ -98,8 +78,41 @@ export default function Properties({ activeMenu }) {
   }
 
 
+  //update Facilities
+  const handDBFacltyDropClick = (elValues, val, i) => {
+    const ary = [...elValues?.facilities];
+    if (!ary.includes(val)) {
+      ary.push(val)
+    } else {
+      return
+    }
+    setFacilitiesUpdate(
+      {
+        facilities: ary
+      }
+    )
+  }
+
+  const HandleDelFacilities = (el, ClickVal, i) => {
+    const removeItem = (array, item) => array.filter((i) => i !== item);
+    const ary = [...el?.facilities];
+
+    setUpdatedFChipAry(removeItem(ary, ClickVal))
+    setUpdatedFChipIndex(i)
+    setUpdatedFChipId(el?._id)
+  }
+
+
   //create property
+  const requiredFields = ['title', 'summery', 'city', 'sector', 'mapLat', 'mapLong', 'price', 'owner', 'room', 'bath', 'area'];
+  const isAnyFieldMissing = requiredFields.some(field => !localPropertyData?.[field]);
   const OnCreateProperty = () => {
+
+    if (isAnyFieldMissing) {
+      alert("Please fill all the fields!");
+      return;
+    }
+
     dispatch(CreateProperty({
       title: localPropertyData?.title,
       summery: localPropertyData.summery,
@@ -126,22 +139,21 @@ export default function Properties({ activeMenu }) {
   }
 
 
-  //update property
+  //update local property
   const handelUpdateProperty = (event, index) => {
     const { name, value } = event.target;
-    console.log(name, value);
-
     setUpdateProperty((prevData) => ({
       ...prevData,
       [index]: { ...prevData[index], [name]: value }
     }));
   }
-
+  //update DB property
   const handleDBPropertyUpdate = (i, id) => {
-    dispatch(UpdateProperty({ data: updateProperty[i], id }))
+    dispatch(UpdateProperty({ data: updateProperty[i], id, otherVal: facilitiesUpdate }))
     Reloader(500)
   }
 
+  console.log(updatedFChipIndex);
 
 
   useEffect(() => {
@@ -234,21 +246,17 @@ export default function Properties({ activeMenu }) {
             <div className="propertyRowBox facltyInBox">
               <h3>Facilities:</h3>
               <div className="facilitiInputBox">
-
-                <div className="dropDwon" onClick={() => setFacilitiesCrDrop(!facilitiesCrDrop)}>
-                  <p className="dropText">{facilitiesCrDropVal || "Select facilities"}</p>
-                  <img src={dropIocn} className="dropIcon" />
-                  <div className={facilitiesCrDrop ? "dropListBox dropListBoxActive" : "dropListBox"}>
-                    {facilites?.map((el, i) => (
-                      <div key={i} className="dropItem" onClick={() => {
-                        setFacilitiesCrDropVal(el)
-                        handleLocalFacltyDropClick(el)
-                      }}>
-                        <p>{el}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <select className='dropDwon'
+                  onChange={(e) => {
+                    handleLocalFacltyDropClick(e.target.value)
+                  }}>
+                  <option value="">Select Facilities</option>
+                  {facilites?.map((el, i) => (
+                    <option key={i} className="dropItem" >
+                      <p>{el}</p>
+                    </option>
+                  ))}
+                </select>
 
                 <div className="chipBox">
                   {
@@ -282,7 +290,10 @@ export default function Properties({ activeMenu }) {
             data?.map((el, i) => (
               <div key={i} className="propertyItemBox">
                 <div className="crudIconBox">
-                  <img src={EditIcon} alt="" onClick={() => setUpdateEditIndex(i)} />
+                  <img src={EditIcon} alt="" onClick={() => {
+                    setUpdateEditIndex(i)
+                    setFacilitiesUpdate({})
+                  }} />
                   <img src={TrashIcon} alt="" onClick={() => DeleteProperty(el?._id)} />
                 </div>
 
@@ -350,23 +361,59 @@ export default function Properties({ activeMenu }) {
                 <div className="propertyRowBox facltyInBox">
                   <h3>facilities:</h3>
                   <div className="facilitiInputBox">
+
+                    <select disabled={updateEditIndex !== i} className='dropDwon renderFDrop'
+                      onChange={(e) => {
+                        handDBFacltyDropClick(el, e.target.value, i)
+                      }}>
+                      <option value="">Select Facilities</option>
+                      {facilites?.map((el, i) => (
+                        <option key={i} className="dropItem" >
+                          <p>{el}</p>
+                        </option>
+                      ))}
+                    </select>
+
                     <div className="chipBox">
                       {
-                        el?.facilities?.map((el, i) => (
-                          <div key={i} className="chip">
-                            <p>{el}</p>
-                            <img src={crossIcon} className="crossIcon" />
-                          </div>
-                        ))
+                        (updatedFChipIndex === undefined || updatedFChipIndex !== i) ? (
+                          el?.facilities?.map((eVal, index) => (
+                            <div key={index} className="chip">
+                              <p>{eVal}</p>
+                              <img
+                                src={crossIcon}
+                                className="crossIcon"
+                                onClick={() => HandleDelFacilities(el, eVal, i)}
+                              />
+                            </div>
+                          ))
+                        ) :
+                          (
+                            updatedFChipAry?.map((eVal, index) => (
+                              <div key={index} className="chip">
+                                <p>{eVal}</p>
+                                <img
+                                  src={crossIcon}
+                                  className="crossIcon"
+                                  onClick={() => HandleDelFacilities(el, eVal, i)}
+                                />
+                              </div>
+                            ))
+
+                          )
+
                       }
+
+
+
+
+
+
                     </div>
                   </div>
                 </div>
                 <div className="BtnBox">
-
                   <button className={updateEditIndex !== i ? 'UpdateBtn ' : "UpdateBtn BtnActive"} disabled={updateEditIndex !== i} onClick={() => handleDBPropertyUpdate(i, el?._id)}>Update</button>
-
-
                 </div>
               </div>
             ))

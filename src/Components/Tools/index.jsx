@@ -31,30 +31,18 @@ export const Reloader = (del) => {
 
 
 
-export const Notification = (type, message = {}) => {
-  // Default toast configuration
-  const defaultOptions = {
-    position: toast.POSITION.TOP_RIGHT,
-    autoClose: 3000, // Auto-close after 3 seconds
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    // Merge user-provided options
-  };
-
+export const Notification = (type, message) => {
   switch (type) {
     case "success":
-      toast.success(message, defaultOptions);
+      toast.success(message);
       break;
     case "error":
-      toast.error(message, defaultOptions);
+      toast.error(message);
       break;
     case "warning":
-      toast.warn(message, defaultOptions);
+      toast.warn(message);
       break;
     default:
-      // Default fallback for unknown type
-      toast.info("Notification type not specified or invalid.", defaultOptions);
+      console.warn(`Unknown notification type: ${type}`);
   }
 };

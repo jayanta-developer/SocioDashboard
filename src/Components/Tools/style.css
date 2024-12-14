@@ -7,33 +7,10 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  cursor: pointer;
 }
-.dropText {
-  font-size: 16px;
-  color: #000;
-  padding-right: 10px;
-}
-.dropIcon {
-  position: absolute;
-  top: 10px;
-  right: 5px;
-  rotate: 90deg;
-  width: 20px;
-}
-.dropListBox {
-  position: absolute;
-  top: -244px;
-  height: 0px;
-  overflow: hidden;
-  width: auto;
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-}
-.dropListBoxActive {
-  height: auto;
-  background: #fff;
-  border: 1px solid gray;
+.dropDwon:focus {
+  outline: none;
 }
 .dropItem {
   width: 100%;
@@ -43,4 +20,7 @@
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid gray;
+}
+.renderFDrop {
+  background: #dedede;
 }

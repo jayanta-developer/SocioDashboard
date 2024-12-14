@@ -160,3 +160,13 @@
   min-width: unset;
   width: 100%;
 }
+.errMsg {
+  display: none;
+  width: 100%;
+  text-align: center;
+  color: red;
+  font-size: 20px;
+}
+.errMsgActive {
+  display: block;
+}

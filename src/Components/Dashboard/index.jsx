@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import "./style.css"
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //components
 import Properties from '../../Pages/Properties';
@@ -20,20 +21,17 @@ export default function Dashboard() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeMenu, setActiveMenu] = useState(0);
   const [logVal, setLogVal] = useState({});
+  const [authErr, setAuthErr] = useState(false)
 
   const AdminEmails = [
     "gopalduttvashisht@gmail.com",
     "hello@goscale.in",
-    "abhigupta1602@gmail.com"
+    "abhigupta1602@gmail.com",
+    "jd"
   ]
   const PDW = "1234";
 
-
   const currentDate = new Date();
-
-
-
-
   const handleLogValu = (e) => {
     const { name, value } = e.target;
     setLogVal(prevState => ({
@@ -43,17 +41,21 @@ export default function Dashboard() {
   }
 
   const handleCheckLog = () => {
-    if (AdminEmails.includes(logVal?.email) || PDW === logVal?.password) {
-      console.log(AdminEmails);
-      console.log(logVal?.email);
+    if (AdminEmails.includes(logVal?.email) && PDW === logVal?.password) {
+      setAuthErr(false)
       setIsLogIn(true)
       localStorage.setItem("localIsLog", true);
       localStorage.setItem("localLogDate", currentDate.toLocaleDateString());
       Notification("Login Successfully", "success")
     } else {
       Notification("Authorization failed", "error")
+      setAuthErr(true)
     }
   }
+  console.log(authErr);
+
+
+  document.addEventListener("keydown", (e) => e?.key === "Enter" ? handleCheckLog() : null)
 
   useEffect(() => {
     if (localIsLog) {
@@ -68,6 +70,8 @@ export default function Dashboard() {
 
   return (
     <>
+      <ToastContainer />
+
       {
         !isLogIng ?
           <div className='adminLogBox'>
@@ -81,6 +85,7 @@ export default function Dashboard() {
               <div className="PropInputBox">
                 <input type="password" name='password' placeholder='Enter your password' onChange={handleLogValu} value={logVal?.password} />
               </div>
+              <p className={authErr ? 'errMsg errMsgActive' : "errMsg"}>Authorization failed!</p>
 
               <div className="UpdateBtn" onClick={handleCheckLog}>
                 <p>LOGIN</p>

@@ -1,14 +1,17 @@
 import Axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const localURL = "http://localhost:4000/socio/api";
-export const serverURL = "https://socioserver.onrender.com/socio/api";
+export const baseURL = "http://localhost:4000/socio/api";
+// export const baseURL = "https://socioserver.onrender.com/socio/api";
 
 export const STATUSES = Object.freeze({
   IDLE: "idle",
   ERROR: "error",
   LOADING: "loading",
 });
+
+const isEmpty = (obj) =>
+  obj && typeof obj === "object" && Object.keys(obj).length === 0;
 
 const PropertySlice = createSlice({
   name: "property",
@@ -42,7 +45,7 @@ export const { get } = PropertySlice.actions;
 export default PropertySlice.reducer;
 
 export const FetchProperties = createAsyncThunk("get/properties", async () => {
-  const res = await fetch(serverURL + "/flats");
+  const res = await fetch(baseURL + "/flats");
   const data = await res.json();
   return data;
 });
@@ -51,7 +54,7 @@ export const CreateProperty = createAsyncThunk(
   "create/property",
   async (data) => {
     try {
-      const res = await Axios.post(serverURL + "/flats/create", {
+      const res = await Axios.post(baseURL + "/flats/create", {
         ...data,
       });
     } catch (err) {
@@ -64,7 +67,7 @@ export const DeletePropert = createAsyncThunk(
   "delete/properties",
   async (id) => {
     try {
-      await Axios.post(serverURL + "/flats/delete/" + id);
+      await Axios.post(baseURL + "/flats/delete/" + id);
     } catch (err) {
       console.log(err);
     }
@@ -73,13 +76,11 @@ export const DeletePropert = createAsyncThunk(
 
 export const UpdateProperty = createAsyncThunk(
   "update/properties",
-  async ({ data, id }) => {
-    console.log(data);
-    console.log(id);
-
+  async ({ data, id, otherVal }) => {
     try {
-      await Axios.post(serverURL + "/flats/update/" + id, {
+      await Axios.post(baseURL + "/flats/update/" + id, {
         ...data,
+        ...(isEmpty(otherVal) ? {} : otherVal),
       });
     } catch (err) {
       console.log(err);
