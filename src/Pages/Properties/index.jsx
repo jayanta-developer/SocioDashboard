@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./style.css"
+import axios from "axios"
 
 //images
 import TrashIcon from "../../assets/Images/trash.svg"
@@ -13,6 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 //components
 import { DropDown, Reloader } from "../../Components/Tools";
+import MultipleImageUpload from "../../Components/ImageUploader"
+import VideoUpload from "../../Components/VideoUploader"
 
 //data
 import { facilites } from "../../assets/index"
@@ -36,7 +39,8 @@ export default function Properties({ activeMenu }) {
   const [updatedFChipIndex, setUpdatedFChipIndex] = useState();
   const [updatedFChipId, setUpdatedFChipId] = useState();
 
-
+  const [video, setVideo] = useState(null);
+  const [images, setImages] = useState([]);
 
 
   const handleLocalPropertyVal = (e) => {
@@ -106,36 +110,91 @@ export default function Properties({ activeMenu }) {
   //create property
   const requiredFields = ['title', 'summery', 'city', 'sector', 'mapLat', 'mapLong', 'price', 'owner', 'room', 'bath', 'area'];
   const isAnyFieldMissing = requiredFields.some(field => !localPropertyData?.[field]);
-  const OnCreateProperty = () => {
+  const OnCreateProperty = async () => {
 
     if (isAnyFieldMissing) {
       alert("Please fill all the fields!");
       return;
     }
 
-    dispatch(CreateProperty({
-      title: localPropertyData?.title,
-      summery: localPropertyData.summery,
-      images: ["url1", "url2"],
-      video: "video url",
-      city: localPropertyData?.city,
-      sector: localPropertyData?.sector,
-      mapLat: localPropertyData?.mapLat,
-      mapLong: localPropertyData?.mapLong,
-      price: localPropertyData.price,
-      owner: localPropertyData.owner,
-      room: localPropertyData.room,
-      bath: localPropertyData.bath,
-      area: localPropertyData.area,
-      facilities: facilitiesCrData
-    }))
-    Reloader(500)
+
+
+
+
+    let imageUploads = []; // Ensure it's always an array
+    if (images && images.length > 0) {
+      imageUploads = images.map((image) => {
+        const formData = new FormData();
+        formData.append('file', image);
+        formData.append('upload_preset', 'NewPreset');
+        return axios.post('https://api.cloudinary.com/v1_1/dtmhts73e/image/upload', formData);
+      });
+    }
+
+    // Upload video to Cloudinary
+    let videoUpload = [];
+    if (video) {
+      const formData = new FormData();
+      formData.append('file', video);
+      formData.append('upload_preset', 'NewPreset');
+      videoUpload = axios.post('https://api.cloudinary.com/v1_1/dtmhts73e/video/upload', formData);
+    }
+
+    // Wait for all uploads to complete
+    const [uploadedImages, uploadedVideo] = await Promise.all([
+      Promise.all(imageUploads),
+      videoUpload,
+    ]);
+
+    try {
+      // Wait for all uploads to complete
+      const [uploadedImages, uploadedVideo] = await Promise.all([
+        Promise.all(imageUploads), // Handles image uploads (empty array is fine)
+        videoUpload,              // Handles video upload (can be null)
+      ]);
+
+      // Extract URLs
+      const imageUrls = uploadedImages.map((response) => response.data.secure_url); // Get image URLs
+      const videoUrl = uploadedVideo?.data?.secure_url || ''; // Get video URL or fallback to an empty string
+
+      // Log the URLs
+      // console.log('Image URLs:', imageUrls);
+      // console.log('Video URL:', videoUrl);
+
+
+      dispatch(CreateProperty({
+        title: localPropertyData?.title,
+        summery: localPropertyData.summery,
+        images: imageUrls,
+        video: videoUrl,
+        city: localPropertyData?.city,
+        sector: localPropertyData?.sector,
+        mapLat: localPropertyData?.mapLat,
+        mapLong: localPropertyData?.mapLong,
+        price: localPropertyData.price,
+        owner: localPropertyData.owner,
+        room: localPropertyData.room,
+        bath: localPropertyData.bath,
+        area: localPropertyData.area,
+        facilities: facilitiesCrData
+      }))
+      Reloader(1500)
+
+      // Example: Return or dispatch the collected URLs
+      return {
+        images: imageUrls,
+        video: videoUrl,
+      };
+    } catch (error) {
+      console.error('Error uploading files:', error);
+      throw error; // Rethrow or handle as needed
+    }
   }
 
   //delete property
   const DeleteProperty = (id) => {
     dispatch(DeletePropert(id))
-    Reloader(500)
+    Reloader(600)
   }
 
 
@@ -152,8 +211,6 @@ export default function Properties({ activeMenu }) {
     dispatch(UpdateProperty({ data: updateProperty[i], id, otherVal: facilitiesUpdate }))
     Reloader(500)
   }
-
-  console.log(updatedFChipIndex);
 
 
   useEffect(() => {
@@ -270,6 +327,18 @@ export default function Properties({ activeMenu }) {
                 </div>
               </div>
             </div>
+
+            <div className="propertyRowBox">
+              <h3>Cover Images:</h3>
+              <MultipleImageUpload images={images} setImages={setImages} />
+            </div>
+            <div className="propertyRowBox">
+              <h3>Video:</h3>
+              <VideoUpload video={video} setVideo={setVideo} />
+            </div>
+
+
+
             <div className="BtnBox">
 
               <div className="UpdateBtn" onClick={() => {
