@@ -119,8 +119,6 @@ export default function Properties({ activeMenu }) {
 
 
 
-
-
     let imageUploads = []; // Ensure it's always an array
     if (images && images.length > 0) {
       imageUploads = images.map((image) => {
@@ -337,10 +335,7 @@ export default function Properties({ activeMenu }) {
               <VideoUpload video={video} setVideo={setVideo} />
             </div>
 
-
-
             <div className="BtnBox">
-
               <div className="UpdateBtn" onClick={() => {
                 setCreatePropertyBox(false)
                 Reloader(0)
@@ -350,7 +345,6 @@ export default function Properties({ activeMenu }) {
               <div className="UpdateBtn" onClick={OnCreateProperty}>
                 <p>Create</p>
               </div>
-
             </div>
           </div>
 
@@ -468,16 +462,8 @@ export default function Properties({ activeMenu }) {
                                 />
                               </div>
                             ))
-
                           )
-
                       }
-
-
-
-
-
-
                     </div>
                   </div>
                 </div>
