@@ -22,25 +22,36 @@ import { facilites } from "../../assets/index"
 
 export default function Properties({ activeMenu }) {
   const dispatch = useDispatch();
-  // dispatch(FetchProperties());
+
   const { status, data } = useSelector((state) => state.Properties);
   const [dropdownStates, setDropdownStates] = useState({});
   const [selectedValues, setSelectedValues] = useState({});
+  const [facilitiesCrData, setFacilitiesCrData] = useState([]);
+  const [deletePop, setDeletePop] = useState(false)
+
+
+  //create
   const [localPropertyData, setLocalPropertyData] = useState();
   const [createPropertyBox, setCreatePropertyBox] = useState(false);
-  const [facilitiesCrData, setFacilitiesCrData] = useState([]);
+  const [video, setVideo] = useState(null);
+  const [images, setImages] = useState([]);
+  const [rating, setRating] = useState()
 
   //update
   const [updateProperty, setUpdateProperty] = useState({})
   const [updateEditIndex, setUpdateEditIndex] = useState()
   const [facilitiesUpdate, setFacilitiesUpdate] = useState({})
-
   const [updatedFChipAry, setUpdatedFChipAry] = useState([]);
   const [updatedFChipIndex, setUpdatedFChipIndex] = useState();
   const [updatedFChipId, setUpdatedFChipId] = useState();
+  const [updateRating, setUpdateRating] = useState()
 
-  const [video, setVideo] = useState(null);
-  const [images, setImages] = useState([]);
+
+
+  ///variables
+  const RatingItems = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
+
+
 
 
   const handleLocalPropertyVal = (e) => {
@@ -118,7 +129,6 @@ export default function Properties({ activeMenu }) {
     }
 
 
-
     let imageUploads = []; // Ensure it's always an array
     if (images && images.length > 0) {
       imageUploads = images.map((image) => {
@@ -147,8 +157,8 @@ export default function Properties({ activeMenu }) {
     try {
       // Wait for all uploads to complete
       const [uploadedImages, uploadedVideo] = await Promise.all([
-        Promise.all(imageUploads), // Handles image uploads (empty array is fine)
-        videoUpload,              // Handles video upload (can be null)
+        Promise.all(imageUploads),
+        videoUpload,
       ]);
 
       // Extract URLs
@@ -174,7 +184,8 @@ export default function Properties({ activeMenu }) {
         room: localPropertyData.room,
         bath: localPropertyData.bath,
         area: localPropertyData.area,
-        facilities: facilitiesCrData
+        facilities: facilitiesCrData,
+        rating
       }))
       Reloader(1500)
 
@@ -189,12 +200,15 @@ export default function Properties({ activeMenu }) {
     }
   }
 
+  const DeletePopOpen = (id) => {
+    DeleteProperty(id)
+  }
+
   //delete property
   const DeleteProperty = (id) => {
     dispatch(DeletePropert(id))
     Reloader(600)
   }
-
 
   //update local property
   const handelUpdateProperty = (event, index) => {
@@ -204,12 +218,12 @@ export default function Properties({ activeMenu }) {
       [index]: { ...prevData[index], [name]: value }
     }));
   }
+
   //update DB property
   const handleDBPropertyUpdate = (i, id) => {
-    dispatch(UpdateProperty({ data: updateProperty[i], id, otherVal: facilitiesUpdate }))
-    Reloader(500)
+    dispatch(UpdateProperty({ data: updateProperty[i], id, otherVal: facilitiesUpdate, rating: updateRating }))
+    // Reloader(500)
   }
-
 
   useEffect(() => {
     dispatch(FetchProperties());
@@ -221,6 +235,19 @@ export default function Properties({ activeMenu }) {
   return (
     <>
       <div className="PropertiesPage" style={{ display: activeMenu === 0 ? "block" : "none" }}>
+
+        <div className={deletePop ? 'popBox popBoxActive' : "popBox"}>
+          <h3>You want to delete this Property ?</h3>
+          <div className="popBtnBox">
+            <div className="blackBtn UpdateBtn" onClick={() => setDeletePop(false)}>
+              <p>Cancel</p>
+            </div>
+            <div className="UpdateBtn" onClick={() => DeleteProperty()}>
+              <p>Delete</p>
+            </div>
+          </div>
+        </div>
+
         <p className="sectionHeader">Property Section</p>
         <div className="addPropertyBtn" onClick={() => setCreatePropertyBox(true)}>
           <img src={AddIcon} />
@@ -237,17 +264,16 @@ export default function Properties({ activeMenu }) {
                 <input type="text" placeholder='Title' name='title' onChange={handleLocalPropertyVal} />
               </div>
             </div>
-            <div className="propertyRowBox">
-              <h3>Price:</h3>
-              <div className="PropInputBox">
-                <input type="text" name="price" onChange={handleLocalPropertyVal} />
-
-              </div>
-            </div>
             <div className="propertyRowBox SummeryInputBox">
               <h3>Summery:</h3>
               <div className="PropInputBox">
                 <textarea type="text" name='summery' onChange={handleLocalPropertyVal} />
+              </div>
+            </div>
+            <div className="propertyRowBox">
+              <h3>Price:</h3>
+              <div className="PropInputBox">
+                <input type="text" name="price" onChange={handleLocalPropertyVal} />
 
               </div>
             </div>
@@ -288,15 +314,23 @@ export default function Properties({ activeMenu }) {
               <h3>Room:</h3>
               <div className="PropInputBox">
                 <input type="text" name='room' onChange={handleLocalPropertyVal} />
-
               </div>
             </div>
             <div className="propertyRowBox">
               <h3>Bath:</h3>
               <div className="PropInputBox">
                 <input type="text" name='bath' onChange={handleLocalPropertyVal} />
-
               </div>
+            </div>
+            <div className="propertyRowBox">
+              <h3>Rating:</h3>
+              <select className='dropDwon' onChange={(e) => setRating(e.target.value)}>
+                {
+                  RatingItems?.map((el, i) => (
+                    <option key={i}>{el}</option>
+                  ))
+                }
+              </select>
             </div>
             <div className="propertyRowBox facltyInBox">
               <h3>Facilities:</h3>
@@ -307,12 +341,11 @@ export default function Properties({ activeMenu }) {
                   }}>
                   <option value="">Select Facilities</option>
                   {facilites?.map((el, i) => (
-                    <option key={i} className="dropItem" >
+                    <option key={i} className="dropItem">
                       <p>{el}</p>
                     </option>
                   ))}
                 </select>
-
                 <div className="chipBox">
                   {
                     facilitiesCrData?.map((e, i) => (
@@ -357,7 +390,7 @@ export default function Properties({ activeMenu }) {
                     setUpdateEditIndex(i)
                     setFacilitiesUpdate({})
                   }} />
-                  <img src={TrashIcon} alt="" onClick={() => DeleteProperty(el?._id)} />
+                  <img src={TrashIcon} alt="" onClick={() => DeletePopOpen(el?._id)} />
                 </div>
 
                 <div className="propertyRowBox">
@@ -393,7 +426,7 @@ export default function Properties({ activeMenu }) {
                 <div className="propertyRowBox">
                   <h3>Map:</h3>
                   <div className="PropInputBox towInput">
-                    <input type="text" name='mapLat' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.mapLat : el?.mapLat} />,
+                    <input type="text" name='mapLat' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.mapLat : el?.mapLat} />|
                     <input type="text" name='mapLong' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.mapLat : el?.mapLat} />
                   </div>
                 </div>
@@ -421,17 +454,26 @@ export default function Properties({ activeMenu }) {
                     <input type="text" name='bath' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.bath : el?.bath} />
                   </div>
                 </div>
+                <div className="propertyRowBox">
+                  <h3>Rating:</h3>
+                  <select className='dropDwon renderFDrop' disabled={updateEditIndex !== i} onChange={(e) => setUpdateRating({ rating: e.target.value })} value={updateRating?.rating ? updateRating?.rating : el?.rating}>
+                    {
+                      RatingItems?.map((el, i) => (
+                        <option key={i}>{el}</option>
+                      ))
+                    }
+                  </select>
+                </div>
                 <div className="propertyRowBox facltyInBox">
                   <h3>facilities:</h3>
                   <div className="facilitiInputBox">
-
                     <select disabled={updateEditIndex !== i} className='dropDwon renderFDrop'
                       onChange={(e) => {
                         handDBFacltyDropClick(el, e.target.value, i)
                       }}>
                       <option value="">Select Facilities</option>
                       {facilites?.map((el, i) => (
-                        <option key={i} className="dropItem" >
+                        <option key={i} className="dropItem">
                           <p>{el}</p>
                         </option>
                       ))}

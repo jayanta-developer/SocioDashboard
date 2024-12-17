@@ -17,6 +17,7 @@
   gap: 30px;
   overflow-y: scroll;
   height: 74vh;
+  border-radius: 10px;
 }
 .propertyItemBox {
   width: 100%;
@@ -193,6 +194,14 @@
   font-size: 20px;
   font-weight: 600;
 }
+.blackBtn {
+  border: 3px solid #000000;
+}
+.blackBtn p {
+  color: #000;
+  font-size: 20px;
+  font-weight: 600;
+}
 .facltyInBox {
   align-items: start;
 }
@@ -201,4 +210,32 @@
 }
 .BtnActive {
   cursor: pointer;
+}
+.popBox {
+  position: absolute;
+  width: 300px;
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  top: 30%;
+  left: 38%;
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.popBox h3 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.popBtnBox {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+}
+.popBoxActive {
+  display: flex;
 }

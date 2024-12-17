@@ -1,8 +1,8 @@
 import Axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// export const baseURL = "http://localhost:4000/socio/api";
-export const baseURL = "https://socioserver.onrender.com/socio/api";
+export const baseURL = "http://localhost:4000/socio/api";
+// export const baseURL = "https://socioserver.onrender.com/socio/api";
 
 export const STATUSES = Object.freeze({
   IDLE: "idle",
@@ -76,11 +76,12 @@ export const DeletePropert = createAsyncThunk(
 
 export const UpdateProperty = createAsyncThunk(
   "update/properties",
-  async ({ data, id, otherVal }) => {
+  async ({ data, id, otherVal, rating }) => {
     try {
       await Axios.post(baseURL + "/flats/update/" + id, {
         ...data,
         ...(isEmpty(otherVal) ? {} : otherVal),
+        ...rating,
       });
     } catch (err) {
       console.log(err);

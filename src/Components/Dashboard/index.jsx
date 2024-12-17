@@ -107,7 +107,7 @@ export default function Dashboard() {
                 </div>
                 <div onClick={() => setActiveMenu(1)} className="sideMenuItem">
                   <img src={report} alt="" />
-                  <p style={{ display: isCollapsed ? "none" : "block" }}>Reports</p>
+                  <p style={{ display: isCollapsed ? "none" : "block" }}>Blogs</p>
                 </div>
                 <div onClick={() => setActiveMenu(2)} className="sideMenuItem">
                   <img src={analytics} alt="" />
