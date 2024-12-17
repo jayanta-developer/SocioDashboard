@@ -1,8 +1,8 @@
 import Axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const baseURL = "http://localhost:4000/socio/api";
-// export const baseURL = "https://socioserver.onrender.com/socio/api";
+// export const baseURL = "http://localhost:4000/socio/api";
+export const baseURL = "https://socioserver.onrender.com/socio/api";
 
 export const STATUSES = Object.freeze({
   IDLE: "idle",
