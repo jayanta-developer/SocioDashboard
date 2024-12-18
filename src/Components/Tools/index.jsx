@@ -46,3 +46,6 @@ export const Notification = (type, message) => {
       console.warn(`Unknown notification type: ${type}`);
   }
 };
+
+
+export const GoTop = () => window.scrollTo({ top: 0, behavior: "smooth" })

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import "./style.css"
 import axios from "axios"
 
@@ -13,9 +13,10 @@ import { FetchProperties, CreateProperty, DeletePropert, UpdateProperty } from "
 import { useDispatch, useSelector } from 'react-redux';
 
 //components
-import { DropDown, Reloader } from "../../Components/Tools";
+import { DropDown, GoTop, Reloader } from "../../Components/Tools";
 import MultipleImageUpload from "../../Components/ImageUploader"
 import VideoUpload from "../../Components/VideoUploader"
+import { InfinitySpin } from 'react-loader-spinner'
 
 //data
 import { facilites } from "../../assets/index"
@@ -28,6 +29,7 @@ export default function Properties({ activeMenu }) {
   const [selectedValues, setSelectedValues] = useState({});
   const [facilitiesCrData, setFacilitiesCrData] = useState([]);
   const [deletePop, setDeletePop] = useState(false)
+  const [loader, setLoader] = useState(false)
 
 
   //create
@@ -46,14 +48,21 @@ export default function Properties({ activeMenu }) {
   const [updatedFChipId, setUpdatedFChipId] = useState();
   const [updateRating, setUpdateRating] = useState()
 
+  //delete
+  const [delPropertyId, setDelPropertyId] = useState()
+
 
 
   ///variables
   const RatingItems = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
 
+  const scrollableDivRef = useRef(null);
 
-
-
+  const scrollToTop = () => {
+    if (scrollableDivRef.current) {
+      scrollableDivRef.current.scrollTop = 0;
+    }
+  };
   const handleLocalPropertyVal = (e) => {
     const { name, value } = e.target;
     setLocalPropertyData(prevState => ({
@@ -127,6 +136,7 @@ export default function Properties({ activeMenu }) {
       alert("Please fill all the fields!");
       return;
     }
+    setLoader(true)
 
 
     let imageUploads = []; // Ensure it's always an array
@@ -134,8 +144,8 @@ export default function Properties({ activeMenu }) {
       imageUploads = images.map((image) => {
         const formData = new FormData();
         formData.append('file', image);
-        formData.append('upload_preset', 'NewPreset');
-        return axios.post('https://api.cloudinary.com/v1_1/dtmhts73e/image/upload', formData);
+        formData.append('upload_preset', 'socioStays');
+        return axios.post('https://api.cloudinary.com/v1_1/djahpqmc3/image/upload', formData);
       });
     }
 
@@ -144,8 +154,8 @@ export default function Properties({ activeMenu }) {
     if (video) {
       const formData = new FormData();
       formData.append('file', video);
-      formData.append('upload_preset', 'NewPreset');
-      videoUpload = axios.post('https://api.cloudinary.com/v1_1/dtmhts73e/video/upload', formData);
+      formData.append('upload_preset', 'socioStays');
+      videoUpload = axios.post('https://api.cloudinary.com/v1_1/djahpqmc3/video/upload', formData);
     }
 
     // Wait for all uploads to complete
@@ -187,6 +197,7 @@ export default function Properties({ activeMenu }) {
         facilities: facilitiesCrData,
         rating
       }))
+      setLoader(false)
       Reloader(1500)
 
       // Example: Return or dispatch the collected URLs
@@ -200,13 +211,13 @@ export default function Properties({ activeMenu }) {
     }
   }
 
-  const DeletePopOpen = (id) => {
-    DeleteProperty(id)
-  }
-
   //delete property
-  const DeleteProperty = (id) => {
-    dispatch(DeletePropert(id))
+  const DeletePopOpen = (id) => {
+    setDelPropertyId(id)
+    setDeletePop(true)
+  }
+  const DeleteProperty = () => {
+    dispatch(DeletePropert(delPropertyId))
     Reloader(600)
   }
 
@@ -234,28 +245,43 @@ export default function Properties({ activeMenu }) {
   }, [])
   return (
     <>
-      <div className="PropertiesPage" style={{ display: activeMenu === 0 ? "block" : "none" }}>
+      <div className={loader ? 'grayBox ActiveGrayBox' : "grayBox"}>
+        <InfinitySpin
+          visible={true}
+          width="200"
+          color="#fdaf17"
+          ariaLabel="infinity-spin-loading"
+        />
+      </div>
+      <div className={deletePop ? 'grayBox ActiveGrayBox' : "grayBox"}>
 
-        <div className={deletePop ? 'popBox popBoxActive' : "popBox"}>
+        <div className="popBox">
           <h3>You want to delete this Property ?</h3>
           <div className="popBtnBox">
             <div className="blackBtn UpdateBtn" onClick={() => setDeletePop(false)}>
               <p>Cancel</p>
             </div>
-            <div className="UpdateBtn" onClick={() => DeleteProperty()}>
+            <div className="UpdateBtn" onClick={DeleteProperty}>
               <p>Delete</p>
             </div>
           </div>
         </div>
+      </div>
+
+
+      <div className="PropertiesPage" style={{ display: activeMenu === 0 ? "block" : "none" }}>
 
         <p className="sectionHeader">Property Section</p>
-        <div className="addPropertyBtn" onClick={() => setCreatePropertyBox(true)}>
+        <div className="addPropertyBtn" onClick={() => {
+          setCreatePropertyBox(true)
+          scrollToTop()
+        }}>
           <img src={AddIcon} />
           <p>Add Property</p>
         </div>
 
 
-        <div className="PropertyListBox">
+        <div ref={scrollableDivRef} className="PropertyListBox">
           {/* -----------------------Add property section------------ */}
           <div className={createPropertyBox ? "propertyItemBox createPropertyBox createPropertyBoxActive" : "propertyItemBox createPropertyBox"}>
             <div className="propertyRowBox">
