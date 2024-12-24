@@ -5,7 +5,8 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
-
+.upload-container input {
+}
 /* Heading styling */
 .upload-container h2 {
   text-align: center;
@@ -105,5 +106,9 @@
   height: 40px;
 }
 #fileInput {
-  display: none;
+  /* display: none; */
+  width: 60px;
+  height: 26px;
+  border: 3px solid #fdaf17;
+  margin-right: 16px;
 }

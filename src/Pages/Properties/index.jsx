@@ -37,6 +37,8 @@ export default function Properties({ activeMenu }) {
   const [createPropertyBox, setCreatePropertyBox] = useState(false);
   const [video, setVideo] = useState(null);
   const [images, setImages] = useState([]);
+  const [previewURLs, setPreviewURLs] = useState([]);
+
   const [rating, setRating] = useState()
 
   //update
@@ -158,12 +160,6 @@ export default function Properties({ activeMenu }) {
       videoUpload = axios.post('https://api.cloudinary.com/v1_1/djahpqmc3/video/upload', formData);
     }
 
-    // Wait for all uploads to complete
-    const [uploadedImages, uploadedVideo] = await Promise.all([
-      Promise.all(imageUploads),
-      videoUpload,
-    ]);
-
     try {
       // Wait for all uploads to complete
       const [uploadedImages, uploadedVideo] = await Promise.all([
@@ -198,7 +194,7 @@ export default function Properties({ activeMenu }) {
         rating
       }))
       setLoader(false)
-      Reloader(1500)
+      // Reloader(1500)
 
       // Example: Return or dispatch the collected URLs
       return {
@@ -387,7 +383,7 @@ export default function Properties({ activeMenu }) {
 
             <div className="propertyRowBox">
               <h3>Cover Images:</h3>
-              <MultipleImageUpload images={images} setImages={setImages} />
+              <MultipleImageUpload images={images} setImages={setImages} previewURLs={previewURLs} setPreviewURLs={setPreviewURLs} />
             </div>
             <div className="propertyRowBox">
               <h3>Video:</h3>

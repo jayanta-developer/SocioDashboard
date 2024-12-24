@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios";
-import "./style.css"; // Import the CSS
+import "./style.css";
 
 import AddIcon from "../../assets/Images/addImg.png";
 
 
-const MultipleImageUpload = ({ images, setImages }) => {
-  const [previewURLs, setPreviewURLs] = useState([]);
-  const [loading, setLoading] = useState(false);
+const MultipleImageUpload = ({ images, setImages, previewURLs, setPreviewURLs }) => {
+
+  // const [previewURLs, setPreviewURLs] = useState([]);
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -23,34 +22,9 @@ const MultipleImageUpload = ({ images, setImages }) => {
     setPreviewURLs(updatedPreviews);
   };
 
-  const handleImagesUpload = async () => {
-    const formData = new FormData();
-    images.forEach((image) => {
-      formData.append("images", image);
-    });
-
-    try {
-      setLoading(true);
-      const response = await axios.post("/upload-images", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      console.log("Images uploaded successfully:", response.data);
-      setImages([]);
-      setPreviewURLs([]);
-    } catch (error) {
-      console.error("Error uploading images:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="upload-container">
-
-      <label htmlFor="fileInput">
-        <img src={AddIcon} className="uploadImgIcon" alt="Upload Icon" />
-      </label>
-
       <input
         id="fileInput"
         type="file"
@@ -69,9 +43,6 @@ const MultipleImageUpload = ({ images, setImages }) => {
           </div>
         ))}
       </div>
-      {/* <button onClick={handleUpload} disabled={loading} className="upload-btn">
-        {loading ? "Uploading..." : "Upload Images"}
-      </button> */}
     </div>
   );
 };

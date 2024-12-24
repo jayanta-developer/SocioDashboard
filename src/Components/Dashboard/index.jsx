@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 //components
 import Properties from '../../Pages/Properties';
+import Blogs from "../../Pages/Blogs"
 import { Notification } from "../../Components/Tools";
 
 //images
@@ -19,7 +20,7 @@ export default function Dashboard() {
   const localLogDate = localStorage.getItem("localLogDate");
   const [isLogIng, setIsLogIn] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeMenu, setActiveMenu] = useState(0);
+  const [activeMenu, setActiveMenu] = useState(1);
   const [logVal, setLogVal] = useState({});
   const [authErr, setAuthErr] = useState(false)
 
@@ -52,8 +53,6 @@ export default function Dashboard() {
       setAuthErr(true)
     }
   }
-  console.log(authErr);
-
 
   document.addEventListener("keydown", (e) => e?.key === "Enter" ? handleCheckLog() : null)
 
@@ -119,7 +118,11 @@ export default function Dashboard() {
               <div className="mainSectionNavBar">
                 <img src={muneIcon} className='haumIcon' alt="" onClick={() => setIsCollapsed(!isCollapsed)} />
               </div>
+
+              {/* Pages */}
               <Properties activeMenu={activeMenu} />
+              <Blogs activeMenu={activeMenu} />
+
             </main>
           </div>
       }

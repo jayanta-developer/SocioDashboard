@@ -1,0 +1,55 @@
+.blogsPage {
+}
+.blogItem {
+}
+.blogTextSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 10px 0;
+}
+.conclusionText {
+  font-size: 16px;
+  color: black;
+}
+.blogsPage .PropInputBox {
+  width: -webkit-fill-available;
+}
+.blogsPage .propertyItemBox {
+  padding-top: 73px;
+}
+.addBlogBox {
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+}
+.addBlogActiveBox {
+  display: flex;
+}
+.blogImg {
+  width: 400px;
+  margin-top: 20px;
+  border-radius: 11px;
+}
+
+.blogChankBtnBox {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.BlogChankBtn {
+  width: 40px;
+  height: 40px;
+}
+.blogImg_Box {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.blogImg {
+  width: 200px;
+}
