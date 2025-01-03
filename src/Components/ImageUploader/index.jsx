@@ -4,10 +4,7 @@ import "./style.css";
 import AddIcon from "../../assets/Images/addImg.png";
 
 
-const MultipleImageUpload = ({ images, setImages, previewURLs, setPreviewURLs }) => {
-
-  // const [previewURLs, setPreviewURLs] = useState([]);
-
+const MultipleImageUpload = ({ images, setImages, previewURLs, setPreviewURLs, imgAltText, setImgAltText }) => {
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     const fileArray = files.map((file) => URL.createObjectURL(file));
@@ -22,7 +19,13 @@ const MultipleImageUpload = ({ images, setImages, previewURLs, setPreviewURLs })
     setPreviewURLs(updatedPreviews);
   };
 
-
+  const handleLocalAltVal = (e) => {
+    const { name, value } = e.target;
+    setImgAltText(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  }
   return (
     <div className="upload-container">
       <input
@@ -40,6 +43,7 @@ const MultipleImageUpload = ({ images, setImages, previewURLs, setPreviewURLs })
             <button onClick={() => handleDelete(index)} className="delete-btn">
               ✖
             </button>
+            <textarea name={index} className="imgAltTextInput" placeholder="ALT Text" onChange={handleLocalAltVal} value={imgAltText?.index} />
           </div>
         ))}
       </div>

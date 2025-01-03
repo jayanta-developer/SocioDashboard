@@ -255,3 +255,22 @@
 .ActiveGrayBox {
   display: flex;
 }
+.ImgMamBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+.RenderImgBox {
+  display: flex;
+  flex-direction: column;
+}
+.RenderImgBox img {
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+}
+.renderVideo {
+  width: 150px;
+  height: 200px;
+}

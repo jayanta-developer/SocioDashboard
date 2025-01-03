@@ -37,6 +37,7 @@ export default function Properties({ activeMenu }) {
   const [createPropertyBox, setCreatePropertyBox] = useState(false);
   const [video, setVideo] = useState(null);
   const [images, setImages] = useState([]);
+  const [imgAltText, setImgAltText] = useState({})
   const [previewURLs, setPreviewURLs] = useState([]);
 
   const [rating, setRating] = useState()
@@ -52,7 +53,6 @@ export default function Properties({ activeMenu }) {
 
   //delete
   const [delPropertyId, setDelPropertyId] = useState()
-
 
 
   ///variables
@@ -171,10 +171,20 @@ export default function Properties({ activeMenu }) {
       const imageUrls = uploadedImages.map((response) => response.data.secure_url);
       const videoUrl = uploadedVideo?.data?.secure_url || '';
 
+      // console.log(imageUrls);
+      // console.log(imgAltText);
+      // console.log(localImagesData);
+
+      const localImagesData = imageUrls.map((el, i) => ({
+        image: el,
+        altText: imgAltText[i],
+      }));
+
+
       dispatch(CreateProperty({
         title: localPropertyData?.title,
         summery: localPropertyData.summery,
-        images: imageUrls,
+        images: localImagesData,
         video: videoUrl,
         city: localPropertyData?.city,
         sector: localPropertyData?.sector,
@@ -236,6 +246,9 @@ export default function Properties({ activeMenu }) {
     }
 
   }, [])
+
+  console.log(updateRating);
+
   return (
     <>
       <div className={loader ? 'grayBox ActiveGrayBox' : "grayBox"}>
@@ -391,7 +404,7 @@ export default function Properties({ activeMenu }) {
 
             <div className="propertyRowBox">
               <h3>Cover Images:</h3>
-              <MultipleImageUpload images={images} setImages={setImages} previewURLs={previewURLs} setPreviewURLs={setPreviewURLs} />
+              <MultipleImageUpload images={images} setImages={setImages} previewURLs={previewURLs} setPreviewURLs={setPreviewURLs} imgAltText={imgAltText} setImgAltText={setImgAltText} />
             </div>
             <div className="propertyRowBox">
               <h3>Video:</h3>
@@ -550,6 +563,28 @@ export default function Properties({ activeMenu }) {
                       }
                     </div>
                   </div>
+                </div>
+                <div className="propertyRowBox">
+                  <h3>Cover Images:</h3>
+                  <div className="ImgMamBox">
+                    {
+                      el?.images?.map((imgVal, i) => (
+                        <div className='RenderImgBox' key={i}>
+                          <img src={imgVal?.image} />
+                          <p>{imgVal?.altText}</p>
+                        </div>
+                      ))
+                    }
+                  </div>
+
+
+
+
+
+                </div>
+                <div className="propertyRowBox">
+                  <h3>Video:</h3>
+                  <video className='renderVideo' src={el?.video} controls autoPlay muted></video>
                 </div>
                 <div className="BtnBox">
                   <button className={updateEditIndex !== i ? 'UpdateBtn ' : "UpdateBtn BtnActive"} disabled={updateEditIndex !== i} onClick={() => handleDBPropertyUpdate(i, el?._id)}>Update</button>
