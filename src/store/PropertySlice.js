@@ -59,6 +59,7 @@ export const CreateProperty = createAsyncThunk(
       });
     } catch (err) {
       console.log(err);
+      alert(err?.response?.data?.error);
     }
   }
 );

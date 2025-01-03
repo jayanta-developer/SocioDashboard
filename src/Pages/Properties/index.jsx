@@ -168,13 +168,8 @@ export default function Properties({ activeMenu }) {
       ]);
 
       // Extract URLs
-      const imageUrls = uploadedImages.map((response) => response.data.secure_url); // Get image URLs
-      const videoUrl = uploadedVideo?.data?.secure_url || ''; // Get video URL or fallback to an empty string
-
-      // Log the URLs
-      // console.log('Image URLs:', imageUrls);
-      // console.log('Video URL:', videoUrl);
-
+      const imageUrls = uploadedImages.map((response) => response.data.secure_url);
+      const videoUrl = uploadedVideo?.data?.secure_url || '';
 
       dispatch(CreateProperty({
         title: localPropertyData?.title,
@@ -191,10 +186,12 @@ export default function Properties({ activeMenu }) {
         bath: localPropertyData.bath,
         area: localPropertyData.area,
         facilities: facilitiesCrData,
-        rating
+        rating,
+        meta_title: localPropertyData.meta_title,
+        meta_description: localPropertyData.meta_description,
       }))
       setLoader(false)
-      // Reloader(1500)
+      Reloader(1500)
 
       // Example: Return or dispatch the collected URLs
       return {
@@ -229,7 +226,7 @@ export default function Properties({ activeMenu }) {
   //update DB property
   const handleDBPropertyUpdate = (i, id) => {
     dispatch(UpdateProperty({ data: updateProperty[i], id, otherVal: facilitiesUpdate, rating: updateRating }))
-    // Reloader(500)
+    Reloader(1000)
   }
 
   useEffect(() => {
@@ -296,7 +293,18 @@ export default function Properties({ activeMenu }) {
               <h3>Price:</h3>
               <div className="PropInputBox">
                 <input type="text" name="price" onChange={handleLocalPropertyVal} />
-
+              </div>
+            </div>
+            <div className="propertyRowBox">
+              <h3>Meta Title:</h3>
+              <div className="PropInputBox">
+                <input type="text" name="meta_title" onChange={handleLocalPropertyVal} />
+              </div>
+            </div>
+            <div className="propertyRowBox SummeryInputBox">
+              <h3>Meta description:</h3>
+              <div className="PropInputBox">
+                <textarea type="text" name="meta_description" onChange={handleLocalPropertyVal} />
               </div>
             </div>
             <div className="propertyRowBox">
@@ -406,7 +414,7 @@ export default function Properties({ activeMenu }) {
           {/* -----------------------Render all data----------------- */}
           {
             data?.map((el, i) => (
-              <div key={i} className="propertyItemBox">
+              <div key={i} className={updateEditIndex !== i ? "propertyItemBox" : "propertyItemBox propertyItemActiveBox"}>
                 <div className="crudIconBox">
                   <img src={EditIcon} alt="" onClick={() => {
                     setUpdateEditIndex(i)
@@ -437,6 +445,18 @@ export default function Properties({ activeMenu }) {
                   <h3>Owner:</h3>
                   <div className="PropInputBox">
                     <input type="text" name='owner' disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.owner : el?.owner} />
+                  </div>
+                </div>
+                <div className="propertyRowBox">
+                  <h3>Meta Title:</h3>
+                  <div className="PropInputBox">
+                    <input type="text" name="meta_title" disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.meta_title : el?.meta_title} />
+                  </div>
+                </div>
+                <div className="propertyRowBox SummeryInputBox">
+                  <h3>Meta description:</h3>
+                  <div className="PropInputBox">
+                    <textarea type="text" name="meta_description" disabled={updateEditIndex !== i} onChange={(e) => handelUpdateProperty(e, i)} value={updateProperty[i] ? updateProperty[i]?.meta_description : el?.meta_description} />
                   </div>
                 </div>
                 <div className="propertyRowBox">
