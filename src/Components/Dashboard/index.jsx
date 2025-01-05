@@ -20,7 +20,7 @@ export default function Dashboard() {
   const localLogDate = localStorage.getItem("localLogDate");
   const [isLogIng, setIsLogIn] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeMenu, setActiveMenu] = useState(0);
+  const [activeMenu, setActiveMenu] = useState(1);
   const [logVal, setLogVal] = useState({});
   const [authErr, setAuthErr] = useState(false)
 

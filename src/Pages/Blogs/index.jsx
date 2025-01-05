@@ -28,6 +28,7 @@ export default function Blogs({ activeMenu }) {
     { title: "", text: "" }
   ]);
   const [images, setImages] = useState([]);
+  const [imgAltText, setImgAltText] = useState({});
   const [previewURLs, setPreviewURLs] = useState([]);
   const [createBlogVal, setCreateBlogVal] = useState({})
   const [loader, setLoader] = useState(false)
@@ -86,13 +87,21 @@ export default function Blogs({ activeMenu }) {
       ]);
       const imageUrls = uploadedImages.map((response) => response.data.secure_url);
 
+      const localImagesData = imageUrls.map((el, i) => ({
+        image: el,
+        altText: imgAltText[i],
+      }));
+
+
       dispatch(CreateBlog({
-        images: imageUrls,
+        images: localImagesData,
         conclusion: createBlogVal?.conclusion,
+        meta_title: createBlogVal?.meta_title,
+        meta_description: createBlogVal?.meta_description,
         SummeryArray: sections
       }))
       setLoader(false)
-      Reloader(1500)
+      // Reloader(1500)
       return {
         images: imageUrls,
       };
@@ -164,17 +173,29 @@ export default function Blogs({ activeMenu }) {
           {/* -----------------------Add blog section------------ */}
 
           <div className={addBlogSection ? "addBlogBox addBlogActiveBox" : "addBlogBox"}>
-            <div className="propertyRowBox">
+            <div className="propertyRowBox" style={{ marginBottom: "30px" }}>
               <h3>Cover Images:</h3>
-              <MultipleImageUpload images={images} setImages={setImages} previewURLs={previewURLs} setPreviewURLs={setPreviewURLs} />
+              <MultipleImageUpload images={images} setImages={setImages} previewURLs={previewURLs} setPreviewURLs={setPreviewURLs} imgAltText={imgAltText} setImgAltText={setImgAltText} />
             </div>
 
 
             <div className="propertyRowBox">
               <h3>Conclusion:</h3>
               <div className="PropInputBox">
-                <input type="text" name='conclusion' onChange={handleBlogInput}
+                <input type="text" name='conclusion' value={createBlogVal?.conclusion} onChange={handleBlogInput}
                 />
+              </div>
+            </div>
+            <div className="propertyRowBox">
+              <h3>Meta Title:</h3>
+              <div className="PropInputBox">
+                <input type="text" name="meta_title" onChange={handleBlogInput} value={createBlogVal?.meta_title} />
+              </div>
+            </div>
+            <div className="propertyRowBox SummeryInputBox">
+              <h3>Meta description:</h3>
+              <div className="PropInputBox">
+                <textarea type="text" name="meta_description" onChange={handleBlogInput} value={createBlogVal?.meta_description} />
               </div>
             </div>
 
@@ -258,13 +279,29 @@ export default function Blogs({ activeMenu }) {
                   <textarea type="text" name='title' value={el?.conclusion} />
                 </div>
               </div>
+              <div className="propertyRowBox">
+                <h3>Meta Title:</h3>
+                <div className="PropInputBox">
+                  <input type="text" name="meta_title" value={el?.meta_title} />
+                </div>
+              </div>
+              <div className="propertyRowBox SummeryInputBox">
+                <h3>Meta description:</h3>
+                <div className="PropInputBox">
+                  <textarea type="text" name="meta_description" value={el?.meta_description} />
+                </div>
+              </div>
               <div className="blogImg_Box">
-
-                {
-                  el?.images?.map((img, imgIndex) => (
-                    <img className="blogImg" src={img} key={imgIndex} />
-                  ))
-                }
+                <div className="ImgMamBox">
+                  {
+                    el?.images?.map((imgVal, i) => (
+                      <div className='RenderImgBox' key={i}>
+                        <img src={imgVal?.image} />
+                        <p>{imgVal?.altText}</p>
+                      </div>
+                    ))
+                  }
+                </div>
               </div>
               <div className="BtnBox">
                 <button className='UpdateBtn' >Update</button>

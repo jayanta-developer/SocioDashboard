@@ -576,11 +576,6 @@ export default function Properties({ activeMenu }) {
                       ))
                     }
                   </div>
-
-
-
-
-
                 </div>
                 <div className="propertyRowBox">
                   <h3>Video:</h3>

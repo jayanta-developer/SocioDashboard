@@ -1,8 +1,8 @@
 import Axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// export const baseURL = "http://localhost:4000/socio/api";
-export const baseURL = "https://socioserver-jg6j.onrender.com/socio/api";
+export const baseURL = "http://localhost:4000/socio/api";
+// export const baseURL = "https://socioserver-jg6j.onrender.com/socio/api";
 
 export const STATUSES = Object.freeze({
   IDLE: "idle",
@@ -63,17 +63,6 @@ export const CreateBlog = createAsyncThunk("create/blog", async (data) => {
     console.log(err);
   }
 });
-
-// export const DeletePropert = createAsyncThunk(
-//   "delete/properties",
-//   async (id) => {
-//     try {
-//       await Axios.post(baseURL + "/flats/delete/" + id);
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   }
-// );
 
 // export const UpdateProperty = createAsyncThunk(
 //   "update/properties",
