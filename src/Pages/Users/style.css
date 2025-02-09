@@ -1,0 +1,44 @@
+.userPage {
+  width: 100%;
+  height: 100%;
+}
+.userListBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: scroll;
+}
+.userTableHeader {
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  flex-direction: row;
+  background: rgba(128, 128, 128, 0.185);
+}
+.tablecel {
+  width: 33%;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}
+.userTableRow {
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  padding-left: 20px;
+}
+.tableUserIcon {
+  width: 30px;
+  position: absolute;
+  left: 0px;
+  cursor: pointer;
+}
+.tableBinIcon {
+  width: 30px;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+}

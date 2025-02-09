@@ -4,6 +4,7 @@ import { persistReducer } from "redux-persist";
 import { combineReducers } from "redux";
 import PropertySlice from "./PropertySlice";
 import BlogSlice from "./BlogSlice";
+import UserSlice from "./UserSlice";
 
 const persistConfig = {
   key: "root",
@@ -13,6 +14,7 @@ const persistConfig = {
 const reducer = combineReducers({
   Properties: PropertySlice,
   Blogs: BlogSlice,
+  Users: UserSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

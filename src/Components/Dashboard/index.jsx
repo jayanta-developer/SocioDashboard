@@ -6,11 +6,13 @@ import 'react-toastify/dist/ReactToastify.css';
 //components
 import Properties from '../../Pages/Properties';
 import Blogs from "../../Pages/Blogs"
+import Users from '../../Pages/Users';
 import { Notification } from "../../Components/Tools";
 
 //images
 import report from "../../assets/Images/reports.svg";
 import analytics from "../../assets/Images/analytics.svg";
+import user from "../../assets/Images/user.svg"
 import muneIcon from "../../assets/Images/menuIcon.svg";
 import CLogo from "../../assets/Images/SocioStaysIcon.png";
 import PropertyIcon from "../../assets/Images/property.png";
@@ -20,9 +22,10 @@ export default function Dashboard() {
   const localLogDate = localStorage.getItem("localLogDate");
   const [isLogIng, setIsLogIn] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [activeMenu, setActiveMenu] = useState(1);
+  const [activeMenu, setActiveMenu] = useState(2);
   const [logVal, setLogVal] = useState({});
   const [authErr, setAuthErr] = useState(false)
+  console.log(activeMenu);
 
   const AdminEmails = [
     "gopalduttvashisht@gmail.com",
@@ -109,8 +112,8 @@ export default function Dashboard() {
                   <p style={{ display: isCollapsed ? "none" : "block" }}>Blogs</p>
                 </div>
                 <div onClick={() => setActiveMenu(2)} className="sideMenuItem">
-                  <img src={analytics} alt="" />
-                  <p style={{ display: isCollapsed ? "none" : "block" }}>Analytics</p>
+                  <img src={user} alt="" />
+                  <p style={{ display: isCollapsed ? "none" : "block" }}>Users</p>
                 </div>
               </nav>
             </aside>
@@ -122,6 +125,7 @@ export default function Dashboard() {
               {/* Pages */}
               <Properties activeMenu={activeMenu} />
               <Blogs activeMenu={activeMenu} />
+              <Users activeMenu={activeMenu} />
 
             </main>
           </div>
