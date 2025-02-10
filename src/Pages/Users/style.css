@@ -42,3 +42,60 @@
   position: absolute;
   right: 20px;
 }
+.discountPop {
+  width: 300px;
+  /* height: 300px; */
+  border: 1px solid red;
+  position: absolute;
+  top: 10%;
+  left: 31%;
+  background: #fff;
+  padding: 15px;
+  border-radius: 15px;
+}
+.discountPop .popBtnBox {
+  margin-top: 20px;
+}
+.disImgBox {
+  width: 100%;
+  height: 350px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+.disImgBox input {
+  display: none;
+}
+.disImgBox label {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.uploadGBox {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(128, 128, 128, 0.479);
+  cursor: pointer;
+}
+.disImgBox:hover > .uploadGBox {
+  display: flex;
+}
+.disImgBox label:hover > .uploadGBox {
+  display: flex;
+}
+.disImgBox .previewImg {
+  width: 100%;
+  height: 100%;
+}
+.discountPopBtn {
+  margin-bottom: 20px;
+}
